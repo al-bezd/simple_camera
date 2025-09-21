@@ -123,45 +123,51 @@ class _SimpleCameraState extends State<SimpleCamera> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(child: CameraPreview(_controller!)),
-      floatingActionButton: widget.takePhotoBtnWidget != null
-          ? GestureDetector(onTap: onPressed, child: widget.takePhotoBtnWidget)
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                StatefulBuilder(
-                  builder: (context, setState) {
-                    final flashOn = FloatingActionButton(
-                      child: Icon(Icons.flash_on),
-                      onPressed: () {
-                        _controller?.setFlashMode(FlashMode.off);
-                        setState(() {
-                          isFlash = false;
-                        });
-                      },
-                    );
-                    final flashOff = FloatingActionButton(
-                      child: Icon(Icons.flash_off),
-                      onPressed: () {
-                        _controller?.setFlashMode(FlashMode.torch);
-                        setState(() {
-                          isFlash = true;
-                        });
-                      },
-                    );
-                    if (isFlash) return flashOff;
-                    return flashOn;
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            StatefulBuilder(
+              builder: (context, setState) {
+                final flashOn = FloatingActionButton(
+                  child: Icon(Icons.flash_on),
+                  onPressed: () {
+                    _controller?.setFlashMode(FlashMode.off);
+                    setState(() {
+                      isFlash = false;
+                    });
                   },
-                ),
-                FloatingActionButton(
-                  onPressed: onPressed,
-                  child: const Icon(Icons.camera_alt),
-                ),
-                FloatingActionButton(
-                  child: Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
+                );
+                final flashOff = FloatingActionButton(
+                  child: Icon(Icons.flash_off),
+                  onPressed: () {
+                    _controller?.setFlashMode(FlashMode.torch);
+                    setState(() {
+                      isFlash = true;
+                    });
+                  },
+                );
+                if (isFlash) return flashOff;
+                return flashOn;
+              },
             ),
+            widget.takePhotoBtnWidget != null
+                ? GestureDetector(
+                    onTap: onPressed,
+                    child: widget.takePhotoBtnWidget,
+                  )
+                : FloatingActionButton(
+                    onPressed: onPressed,
+                    child: const Icon(Icons.camera_alt),
+                  ),
+            FloatingActionButton(
+              child: Icon(Icons.close),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
