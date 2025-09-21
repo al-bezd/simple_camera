@@ -127,46 +127,7 @@ class _SimpleCameraState extends State<SimpleCamera> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            StatefulBuilder(
-              builder: (context, setState) {
-                flashWidget(void Function(void Function()) setState) {
-                  switch (_controller?.value.flashMode) {
-                    case FlashMode.auto:
-                      return GestureDetector(
-                        child: const Icon(
-                          Icons.flash_auto,
-                          color: Colors.white,
-                        ),
-                        onTap: () {
-                          _controller?.setFlashMode(FlashMode.torch);
-                          setState(() {});
-                        },
-                      );
-                    case FlashMode.torch:
-                      return GestureDetector(
-                        child: const Icon(Icons.flash_on, color: Colors.white),
-                        onTap: () {
-                          _controller?.setFlashMode(FlashMode.off);
-                          setState(() {});
-                        },
-                      );
-                    case FlashMode.off:
-                      return GestureDetector(
-                        child: const Icon(Icons.flash_off, color: Colors.white),
-                        onTap: () {
-                          _controller?.setFlashMode(FlashMode.auto);
-                          setState(() {});
-                        },
-                      );
-
-                    case _:
-                      return const SizedBox();
-                  }
-                }
-
-                return flashWidget(setState);
-              },
-            ),
+            FlashButton(controller: _controller),
             widget.takePhotoBtnWidget != null
                 ? GestureDetector(
                     onTap: onPressed,
@@ -189,5 +150,48 @@ class _SimpleCameraState extends State<SimpleCamera> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+}
+
+class FlashButton extends StatefulWidget {
+  final CameraController? controller;
+
+  const FlashButton({super.key, required this.controller});
+
+  @override
+  State<FlashButton> createState() => _FlashButtonState();
+}
+
+class _FlashButtonState extends State<FlashButton> {
+  @override
+  Widget build(BuildContext context) {
+    switch (widget.controller?.value.flashMode) {
+      case FlashMode.auto:
+        return GestureDetector(
+          child: const Icon(Icons.flash_auto, color: Colors.white),
+          onTap: () {
+            widget.controller?.setFlashMode(FlashMode.torch);
+            setState(() {});
+          },
+        );
+      case FlashMode.torch:
+        return GestureDetector(
+          child: const Icon(Icons.flash_on, color: Colors.white),
+          onTap: () {
+            widget.controller?.setFlashMode(FlashMode.off);
+            setState(() {});
+          },
+        );
+      case FlashMode.off:
+        return GestureDetector(
+          child: const Icon(Icons.flash_off, color: Colors.white),
+          onTap: () {
+            widget.controller?.setFlashMode(FlashMode.auto);
+            setState(() {});
+          },
+        );
+      default:
+        return const SizedBox();
+    }
   }
 }
