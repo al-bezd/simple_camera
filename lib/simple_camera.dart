@@ -130,18 +130,18 @@ class _SimpleCameraState extends State<SimpleCamera> {
           children: [
             StatefulBuilder(
               builder: (context, setState) {
-                final flashOn = FloatingActionButton(
-                  child: Icon(Icons.flash_on),
-                  onPressed: () {
+                final flashOn = GestureDetector(
+                  child: const Icon(Icons.flash_on, color: Colors.white),
+                  onTap: () {
                     _controller?.setFlashMode(FlashMode.off);
                     setState(() {
                       isFlash = false;
                     });
                   },
                 );
-                final flashOff = FloatingActionButton(
-                  child: Icon(Icons.flash_off),
-                  onPressed: () {
+                final flashOff = GestureDetector(
+                  child: const Icon(Icons.flash_off, color: Colors.white),
+                  onTap: () {
                     _controller?.setFlashMode(FlashMode.torch);
                     setState(() {
                       isFlash = true;
@@ -157,13 +157,13 @@ class _SimpleCameraState extends State<SimpleCamera> {
                     onTap: onPressed,
                     child: widget.takePhotoBtnWidget,
                   )
-                : FloatingActionButton(
-                    onPressed: onPressed,
-                    child: const Icon(Icons.camera_alt),
+                : GestureDetector(
+                    onTap: onPressed,
+                    child: const Icon(Icons.camera_alt, color: Colors.white),
                   ),
-            FloatingActionButton(
-              child: Icon(Icons.close),
-              onPressed: () => Navigator.pop(context),
+            GestureDetector(
+              child: const Icon(Icons.close, color: Colors.white),
+              onTap: () => Navigator.pop(context),
             ),
           ],
         ),
