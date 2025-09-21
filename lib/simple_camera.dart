@@ -124,7 +124,7 @@ class _SimpleCameraState extends State<SimpleCamera> {
       backgroundColor: Colors.black,
       body: Center(child: CameraPreview(_controller!)),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -159,7 +159,11 @@ class _SimpleCameraState extends State<SimpleCamera> {
                   )
                 : GestureDetector(
                     onTap: onPressed,
-                    child: const Icon(Icons.camera_alt, color: Colors.white),
+                    child: const Icon(
+                      Icons.camera_alt,
+                      color: Colors.white,
+                      size: 32,
+                    ),
                   ),
             GestureDetector(
               child: const Icon(Icons.close, color: Colors.white),
