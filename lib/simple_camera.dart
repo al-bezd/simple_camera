@@ -7,22 +7,32 @@ class SimpleCamera extends StatefulWidget {
     this.onTakePhoto,
     this.resolution,
     this.enableAudio = false,
-    this.fps = 30,
+    this.fps,
     this.format = ImageFormatGroup.jpeg,
+    this.takePhotoBtnWidget,
   });
   final void Function(XFile file)? onTakePhoto;
   final ResolutionPreset? resolution;
   final bool enableAudio;
-  final int fps;
+  final int? fps;
   final ImageFormatGroup format;
+  final Widget? takePhotoBtnWidget;
 
+  //
   static List<CameraDescription> cameras = [];
   static GlobalKey<NavigatorState>? _navigatorKey;
+
   static void initialize({required GlobalKey<NavigatorState> navigatorKey}) {
     _navigatorKey = navigatorKey;
   }
 
-  static show(Function(XFile file)? onTakePhoto) {
+  static show(
+    Function(XFile file)? onTakePhoto, {
+    Widget? takePhotoBtnWidget,
+    ImageFormatGroup format = ImageFormatGroup.jpeg,
+    int? fps,
+    ResolutionPreset? resolution,
+  }) {
     final context = _navigatorKey?.currentState?.context;
     if (context == null) {
       throw Exception(
@@ -32,7 +42,13 @@ class SimpleCamera extends StatefulWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SimpleCamera(onTakePhoto: onTakePhoto),
+        builder: (context) => SimpleCamera(
+          onTakePhoto: onTakePhoto,
+          takePhotoBtnWidget: takePhotoBtnWidget,
+          format: format,
+          fps: fps,
+          resolution: resolution,
+        ),
       ),
     );
   }
@@ -106,7 +122,7 @@ class _SimpleCameraState extends State<SimpleCamera> {
             Navigator.pop(context);
           }
         },
-        child: const Icon(Icons.camera_alt),
+        child: widget.takePhotoBtnWidget ?? const Icon(Icons.camera_alt),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
