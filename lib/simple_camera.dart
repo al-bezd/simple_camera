@@ -59,7 +59,7 @@ class SimpleCamera extends StatefulWidget {
 
 class _SimpleCameraState extends State<SimpleCamera> {
   CameraController? _controller;
-  bool isFlash = false;
+  bool get isFlash => _controller?.value.flashMode == FlashMode.torch;
   @override
   void initState() {
     super.initState();
@@ -133,18 +133,16 @@ class _SimpleCameraState extends State<SimpleCamera> {
                 final flashOn = GestureDetector(
                   child: const Icon(Icons.flash_on, color: Colors.white),
                   onTap: () {
-                    _controller?.setFlashMode(FlashMode.off);
                     setState(() {
-                      isFlash = false;
+                      _controller?.setFlashMode(FlashMode.off);
                     });
                   },
                 );
                 final flashOff = GestureDetector(
                   child: const Icon(Icons.flash_off, color: Colors.white),
                   onTap: () {
-                    _controller?.setFlashMode(FlashMode.torch);
                     setState(() {
-                      isFlash = true;
+                      _controller?.setFlashMode(FlashMode.torch);
                     });
                   },
                 );
