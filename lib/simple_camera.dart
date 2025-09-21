@@ -111,19 +111,24 @@ class _SimpleCameraState extends State<SimpleCamera> {
     if (_controller == null || !_controller!.value.isInitialized) {
       return const Center(child: CircularProgressIndicator());
     }
+
+    onPressed() async {
+      await _takePicture();
+      if (context.mounted) {
+        // Проверяем mounted у контекста
+        Navigator.pop(context);
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(child: CameraPreview(_controller!)),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _takePicture();
-          if (context.mounted) {
-            // Проверяем mounted у контекста
-            Navigator.pop(context);
-          }
-        },
-        child: widget.takePhotoBtnWidget ?? const Icon(Icons.camera_alt),
-      ),
+      floatingActionButton: widget.takePhotoBtnWidget != null
+          ? GestureDetector(onTap: onPressed, child: widget.takePhotoBtnWidget)
+          : FloatingActionButton(
+              onPressed: onPressed,
+              child: const Icon(Icons.camera_alt),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
