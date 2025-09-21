@@ -59,7 +59,7 @@ class SimpleCamera extends StatefulWidget {
 
 class _SimpleCameraState extends State<SimpleCamera> {
   CameraController? _controller;
-
+  bool isFlash = false;
   @override
   void initState() {
     super.initState();
@@ -125,9 +125,42 @@ class _SimpleCameraState extends State<SimpleCamera> {
       body: Center(child: CameraPreview(_controller!)),
       floatingActionButton: widget.takePhotoBtnWidget != null
           ? GestureDetector(onTap: onPressed, child: widget.takePhotoBtnWidget)
-          : FloatingActionButton(
-              onPressed: onPressed,
-              child: const Icon(Icons.camera_alt),
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                StatefulBuilder(
+                  builder: (context, setState) {
+                    final flashOn = FloatingActionButton(
+                      child: Icon(Icons.flash_on),
+                      onPressed: () {
+                        _controller?.setFlashMode(FlashMode.off);
+                        setState(() {
+                          isFlash = false;
+                        });
+                      },
+                    );
+                    final flashOff = FloatingActionButton(
+                      child: Icon(Icons.flash_off),
+                      onPressed: () {
+                        _controller?.setFlashMode(FlashMode.torch);
+                        setState(() {
+                          isFlash = true;
+                        });
+                      },
+                    );
+                    if (isFlash) return flashOff;
+                    return flashOn;
+                  },
+                ),
+                FloatingActionButton(
+                  onPressed: onPressed,
+                  child: const Icon(Icons.camera_alt),
+                ),
+                FloatingActionButton(
+                  child: Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
