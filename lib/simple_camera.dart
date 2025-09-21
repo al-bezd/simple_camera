@@ -169,24 +169,24 @@ class _FlashButtonState extends State<FlashButton> {
       case FlashMode.auto:
         return GestureDetector(
           child: const Icon(Icons.flash_auto, color: Colors.white),
-          onTap: () {
-            widget.controller?.setFlashMode(FlashMode.torch);
+          onTap: () async {
+            await widget.controller?.setFlashMode(FlashMode.torch);
             setState(() {});
           },
         );
       case FlashMode.torch:
         return GestureDetector(
           child: const Icon(Icons.flash_on, color: Colors.white),
-          onTap: () {
-            widget.controller?.setFlashMode(FlashMode.off);
+          onTap: () async {
+            await widget.controller?.setFlashMode(FlashMode.off);
             setState(() {});
           },
         );
       case FlashMode.off:
         return GestureDetector(
           child: const Icon(Icons.flash_off, color: Colors.white),
-          onTap: () {
-            widget.controller?.setFlashMode(FlashMode.auto);
+          onTap: () async {
+            await widget.controller?.setFlashMode(FlashMode.auto);
             setState(() {});
           },
         );
