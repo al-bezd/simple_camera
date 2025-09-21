@@ -115,40 +115,7 @@ class _SimpleCameraState extends State<SimpleCamera> {
     onPressed() async {
       await _takePicture();
       if (context.mounted) {
-        // Проверяем mounted у контекста
         Navigator.pop(context);
-      }
-    }
-
-    flashWidget(void Function(void Function()) setState) {
-      switch (_controller?.value.flashMode) {
-        case FlashMode.auto:
-          return GestureDetector(
-            child: const Icon(Icons.flash_auto, color: Colors.white),
-            onTap: () {
-              _controller?.setFlashMode(FlashMode.torch);
-              setState(() {});
-            },
-          );
-        case FlashMode.torch:
-          return GestureDetector(
-            child: const Icon(Icons.flash_on, color: Colors.white),
-            onTap: () {
-              _controller?.setFlashMode(FlashMode.off);
-              setState(() {});
-            },
-          );
-        case FlashMode.off:
-          return GestureDetector(
-            child: const Icon(Icons.flash_off, color: Colors.white),
-            onTap: () {
-              _controller?.setFlashMode(FlashMode.auto);
-              setState(() {});
-            },
-          );
-
-        case _:
-          return const SizedBox();
       }
     }
 
@@ -162,6 +129,41 @@ class _SimpleCameraState extends State<SimpleCamera> {
           children: [
             StatefulBuilder(
               builder: (context, setState) {
+                flashWidget(void Function(void Function()) setState) {
+                  switch (_controller?.value.flashMode) {
+                    case FlashMode.auto:
+                      return GestureDetector(
+                        child: const Icon(
+                          Icons.flash_auto,
+                          color: Colors.white,
+                        ),
+                        onTap: () {
+                          _controller?.setFlashMode(FlashMode.torch);
+                          setState(() {});
+                        },
+                      );
+                    case FlashMode.torch:
+                      return GestureDetector(
+                        child: const Icon(Icons.flash_on, color: Colors.white),
+                        onTap: () {
+                          _controller?.setFlashMode(FlashMode.off);
+                          setState(() {});
+                        },
+                      );
+                    case FlashMode.off:
+                      return GestureDetector(
+                        child: const Icon(Icons.flash_off, color: Colors.white),
+                        onTap: () {
+                          _controller?.setFlashMode(FlashMode.auto);
+                          setState(() {});
+                        },
+                      );
+
+                    case _:
+                      return const SizedBox();
+                  }
+                }
+
                 return flashWidget(setState);
               },
             ),
