@@ -59,7 +59,7 @@ class SimpleCamera extends StatefulWidget {
 
 class _SimpleCameraState extends State<SimpleCamera> {
   CameraController? _controller;
-  bool get isFlash => _controller?.value.flashMode == FlashMode.torch;
+
   @override
   void initState() {
     super.initState();
@@ -120,6 +120,41 @@ class _SimpleCameraState extends State<SimpleCamera> {
       }
     }
 
+    flashWidget(void Function(void Function()) setState) {
+      switch (_controller?.value.flashMode) {
+        case FlashMode.auto:
+          return GestureDetector(
+            child: const Icon(Icons.flash_auto, color: Colors.white),
+            onTap: () {
+              setState(() {
+                _controller?.setFlashMode(FlashMode.torch);
+              });
+            },
+          );
+        case FlashMode.torch:
+          return GestureDetector(
+            child: const Icon(Icons.flash_on, color: Colors.white),
+            onTap: () {
+              setState(() {
+                _controller?.setFlashMode(FlashMode.off);
+              });
+            },
+          );
+        case FlashMode.off:
+          return GestureDetector(
+            child: const Icon(Icons.flash_off, color: Colors.white),
+            onTap: () {
+              setState(() {
+                _controller?.setFlashMode(FlashMode.auto);
+              });
+            },
+          );
+
+        case _:
+          return const SizedBox();
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(child: CameraPreview(_controller!)),
@@ -130,24 +165,7 @@ class _SimpleCameraState extends State<SimpleCamera> {
           children: [
             StatefulBuilder(
               builder: (context, setState) {
-                if (isFlash) {
-                  return GestureDetector(
-                    child: const Icon(Icons.flash_off, color: Colors.white),
-                    onTap: () {
-                      setState(() {
-                        _controller?.setFlashMode(FlashMode.torch);
-                      });
-                    },
-                  );
-                }
-                return GestureDetector(
-                  child: const Icon(Icons.flash_on, color: Colors.white),
-                  onTap: () {
-                    setState(() {
-                      _controller?.setFlashMode(FlashMode.off);
-                    });
-                  },
-                );
+                return flashWidget(setState);
               },
             ),
             widget.takePhotoBtnWidget != null
