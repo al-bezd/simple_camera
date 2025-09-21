@@ -126,27 +126,24 @@ class _SimpleCameraState extends State<SimpleCamera> {
           return GestureDetector(
             child: const Icon(Icons.flash_auto, color: Colors.white),
             onTap: () {
-              setState(() {
-                _controller?.setFlashMode(FlashMode.torch);
-              });
+              _controller?.setFlashMode(FlashMode.torch);
+              setState(() {});
             },
           );
         case FlashMode.torch:
           return GestureDetector(
             child: const Icon(Icons.flash_on, color: Colors.white),
             onTap: () {
-              setState(() {
-                _controller?.setFlashMode(FlashMode.off);
-              });
+              _controller?.setFlashMode(FlashMode.off);
+              setState(() {});
             },
           );
         case FlashMode.off:
           return GestureDetector(
             child: const Icon(Icons.flash_off, color: Colors.white),
             onTap: () {
-              setState(() {
-                _controller?.setFlashMode(FlashMode.auto);
-              });
+              _controller?.setFlashMode(FlashMode.auto);
+              setState(() {});
             },
           );
 
