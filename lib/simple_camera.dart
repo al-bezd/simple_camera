@@ -130,7 +130,17 @@ class _SimpleCameraState extends State<SimpleCamera> {
           children: [
             StatefulBuilder(
               builder: (context, setState) {
-                final flashOn = GestureDetector(
+                if (isFlash) {
+                  return GestureDetector(
+                    child: const Icon(Icons.flash_off, color: Colors.white),
+                    onTap: () {
+                      setState(() {
+                        _controller?.setFlashMode(FlashMode.torch);
+                      });
+                    },
+                  );
+                }
+                return GestureDetector(
                   child: const Icon(Icons.flash_on, color: Colors.white),
                   onTap: () {
                     setState(() {
@@ -138,16 +148,6 @@ class _SimpleCameraState extends State<SimpleCamera> {
                     });
                   },
                 );
-                final flashOff = GestureDetector(
-                  child: const Icon(Icons.flash_off, color: Colors.white),
-                  onTap: () {
-                    setState(() {
-                      _controller?.setFlashMode(FlashMode.torch);
-                    });
-                  },
-                );
-                if (isFlash) return flashOff;
-                return flashOn;
               },
             ),
             widget.takePhotoBtnWidget != null
