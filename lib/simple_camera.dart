@@ -152,12 +152,12 @@ class _SimpleCameraState extends State<SimpleCamera> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    onPressed() async {
-      final file = await _takePicture();
-      if (context.mounted) {
-        Navigator.pop(context, file);
-      }
-    }
+    // onPressed() async {
+    //   final file = await _takePicture();
+    //   if (context.mounted) {
+    //     Navigator.pop(context, file);
+    //   }
+    // }
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -170,11 +170,11 @@ class _SimpleCameraState extends State<SimpleCamera> {
             FlashButton(controller: _controller),
             widget.takePhotoBtnWidget != null
                 ? GestureDetector(
-                    onTap: onPressed,
+                    onTap: _takePicture,
                     child: widget.takePhotoBtnWidget,
                   )
                 : GestureDetector(
-                    onTap: onPressed,
+                    onTap: _takePicture,
                     child: const Icon(
                       Icons.camera_alt,
                       color: Colors.white,
