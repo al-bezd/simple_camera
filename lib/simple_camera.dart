@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +7,7 @@ class SimpleCamera extends StatefulWidget {
   const SimpleCamera({
     super.key,
     this.onTakePhoto,
+    this.onCancel,
     this.resolution,
     this.enableAudio = false,
     this.fps,
@@ -12,6 +15,7 @@ class SimpleCamera extends StatefulWidget {
     this.takePhotoBtnWidget,
   });
   final void Function(XFile file)? onTakePhoto;
+  final void Function()? onCancel;
   final ResolutionPreset? resolution;
   final bool enableAudio;
   final int? fps;
@@ -53,6 +57,40 @@ class SimpleCamera extends StatefulWidget {
     );
   }
 
+  static Future<XFile?> takePicture({
+    Widget? takePhotoBtnWidget,
+    ImageFormatGroup format = ImageFormatGroup.jpeg,
+    int? fps,
+    ResolutionPreset? resolution,
+  }) async {
+    final context = _navigatorKey?.currentState?.context;
+    if (context == null) {
+      throw Exception(
+        'NavigatorKey not initialized. Call SimpleCamera.initialize() first',
+      );
+    }
+
+    final XFile? res = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SimpleCamera(
+          onTakePhoto: (XFile file) {
+            Navigator.pop(context, file);
+          },
+          onCancel: () {
+            Navigator.pop(context, null);
+          },
+          takePhotoBtnWidget: takePhotoBtnWidget,
+          format: format,
+          fps: fps,
+          resolution: resolution,
+        ),
+      ),
+    );
+
+    return res;
+  }
+
   @override
   State<SimpleCamera> createState() => _SimpleCameraState();
 }
@@ -86,18 +124,20 @@ class _SimpleCameraState extends State<SimpleCamera> {
     setState(() {});
   }
 
-  Future<void> _takePicture() async {
+  Future<XFile?> _takePicture() async {
     if (!_controller!.value.isInitialized) {
-      return;
+      return null;
     }
 
     try {
       final XFile file = await _controller!.takePicture();
 
       widget.onTakePhoto?.call(file);
+      return file;
     } on CameraException catch (e) {
       debugPrint('$e');
     }
+    return null;
   }
 
   @override
@@ -113,9 +153,9 @@ class _SimpleCameraState extends State<SimpleCamera> {
     }
 
     onPressed() async {
-      await _takePicture();
+      final file = await _takePicture();
       if (context.mounted) {
-        Navigator.pop(context);
+        Navigator.pop(context, file);
       }
     }
 
@@ -143,7 +183,13 @@ class _SimpleCameraState extends State<SimpleCamera> {
                   ),
             GestureDetector(
               child: const Icon(Icons.close, color: Colors.white),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                if (widget.onCancel == null) {
+                  Navigator.pop(context, null);
+                  return;
+                }
+                widget.onCancel?.call();
+              },
             ),
           ],
         ),
